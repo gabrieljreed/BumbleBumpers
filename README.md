@@ -1,5 +1,5 @@
 # BumbleBumpers
-Game for final project of BYU CS 455
+Game for final project of BYU CS 455. Written in C++ and OpenGL. 
 
 ## Installation
 ```bash
