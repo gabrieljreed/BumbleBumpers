@@ -33,6 +33,9 @@ int main(int argc, char * argv[]) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     auto mWindow = glfwCreateWindow(mWidth, mHeight, "Bumble Bumpers", nullptr, nullptr);
 
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(mWindow, &windowWidth, &windowHeight);
+
     // Check for Valid Context
     if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
@@ -46,19 +49,11 @@ int main(int argc, char * argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
-    // ------------------------------------------------ TESTING ------------------------------------------------
-
-    TCHAR Buffer[MAX_PATH];
-    DWORD dwRet;
-
-    dwRet = GetCurrentDirectory(MAX_PATH, Buffer);
-    cout << dwRet << endl;
-
     // ------------------------------------------------ MODELS ------------------------------------------------
 
     // Read objects 
     mlModel model;
-    if (!LoadModel("../Models", "Giraffe.obj", model)) return -1;
+    if (!LoadModel("../Models", "TestCrayon.obj", model)) return -1;
 
     // Store data from objects 
     vector<mlVertex> verts;
@@ -96,7 +91,7 @@ int main(int argc, char * argv[]) {
 
     // ------------------------------------------------ SHADERS ------------------------------------------------
     // Import shader code
-    GLuint myShader = LoadProgram("C:/Users/gabri/Desktop/455/Glitter/Glitter/Shaders/basic.vert", "C:/Users/gabri/Desktop/455/Glitter/Glitter/Shaders/basic.frag");
+    GLuint myShader = LoadProgram("../Glitter/Shaders/basic.vert", "../Glitter/Shaders/basic.frag");
 
     GLuint VAO, EBO, VBO;
     glGenVertexArrays(1, &VAO);
@@ -135,10 +130,26 @@ int main(int argc, char * argv[]) {
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// **********************************
-		// Add rendering code here
+        glUseProgram(myShader);
 
-		// **********************************
+        // Create uniform perspective matrix 
+        glm::mat4 persp = glm::perspective(50.0f, (float)windowWidth / (float)windowHeight, 0.001f, 10000.0f);
+        GLint perspLoc = glGetUniformLocation(myShader, "persp");
+        glUniformMatrix4fv(perspLoc, 1, GL_FALSE, glm::value_ptr(persp));
+
+        // Create transformation matrix 
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(0.0f, 0.05f, -10.0f));
+        transform = glm::rotate(transform, 3.14f, glm::vec3(1.0f, 0.0f, 0.0f));
+        transform = glm::rotate(transform, 3.14f / 4, glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
+        GLint transformLoc = glGetUniformLocation(myShader, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+        glBindVertexArray(VAO);                                                     // Bind VAO
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
+
+        glBindVertexArray(0);                                                       // Unbind VAO (not 100% necessary here because there's only one VAO)
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
