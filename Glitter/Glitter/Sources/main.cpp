@@ -43,6 +43,10 @@ const float farClip = 10000.0f;
 bool firstMouse = true;
 float lastX = windowWidth / 2;
 float lastY = windowHeight / 2;
+float pitch = 0.0f;
+float yaw = -90.0f;
+
+const float mouseSensitivity = 0.1f;
 
 
 int main(int argc, char * argv[]) {
@@ -198,9 +202,6 @@ void handleKeypress(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    glm::vec3 v = glm::cross(cameraLookAt, cameraUp);
-    cout << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << endl;
-
     // WSAD movement 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cameraPosition += cameraSpeed * cameraLookAt;
@@ -213,5 +214,33 @@ void handleKeypress(GLFWwindow* window) {
 }
 
 void handleMouse(GLFWwindow* window, double xPos, double yPos) {
+    if (firstMouse) {
+        lastX = xPos;
+        lastY = yPos;
+        firstMouse = false;
+    }
 
+    float xOffset = xPos - lastX;
+    float yOffset = yPos - lastY;
+    lastX = xPos;
+    lastY = yPos;
+
+    xOffset *= mouseSensitivity;
+    yOffset *= mouseSensitivity;
+
+    yaw += xOffset;
+    pitch += yOffset;
+
+    // Clamp values so they don't go over 
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+    cameraLookAt = glm::normalize(direction);
 }
