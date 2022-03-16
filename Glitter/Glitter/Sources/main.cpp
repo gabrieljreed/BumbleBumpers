@@ -22,6 +22,15 @@
 
 using namespace std;
 
+void handleKeypress(GLFWwindow* window);
+
+// ------------------------------------------------ CAMERA SETTINGS ------------------------------------------------
+glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraLookAt = glm::vec3(0.0f, 0.0f, -2.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+const float cameraSpeed = 0.05f;
+
 int main(int argc, char * argv[]) {
 
     // Load GLFW and Create a Window
@@ -119,25 +128,29 @@ int main(int argc, char * argv[]) {
 
     glEnable(GL_DEPTH_TEST);
 
+    glUseProgram(myShader);
+
+    // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
+    glm::mat4 persp = glm::perspective(50.0f, (float)windowWidth / (float)windowHeight, 0.001f, 10000.0f);
+    GLint perspLoc = glGetUniformLocation(myShader, "persp");
+    glUniformMatrix4fv(perspLoc, 1, GL_FALSE, glm::value_ptr(persp));
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
     while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(mWindow, true);
+        handleKeypress(mWindow);
 
         // Background Fill Color
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(myShader);
+        // View matrix 
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
+        GLint viewLoc = glGetUniformLocation(myShader, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-        // Create uniform perspective matrix 
-        glm::mat4 persp = glm::perspective(50.0f, (float)windowWidth / (float)windowHeight, 0.001f, 10000.0f);
-        GLint perspLoc = glGetUniformLocation(myShader, "persp");
-        glUniformMatrix4fv(perspLoc, 1, GL_FALSE, glm::value_ptr(persp));
-
-        // Create transformation matrix 
+        // Transformation matrix 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::translate(transform, glm::vec3(0.0f, 0.05f, -10.0f));
         transform = glm::rotate(transform, 3.14f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -157,4 +170,22 @@ int main(int argc, char * argv[]) {
     }   glfwTerminate();
 
     return EXIT_SUCCESS;
+}
+
+void handleKeypress(GLFWwindow* window) {
+    // Esc to quit 
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    glm::vec3 v = glm::cross(cameraLookAt, cameraUp);
+
+    // WSAD movement 
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPosition += cameraSpeed * cameraLookAt;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPosition -= cameraSpeed * cameraLookAt;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
 }
