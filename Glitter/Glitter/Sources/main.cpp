@@ -25,11 +25,11 @@ using namespace std;
 void handleKeypress(GLFWwindow* window);
 
 // ------------------------------------------------ CAMERA SETTINGS ------------------------------------------------
-glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 cameraLookAt = glm::vec3(0.0f, 0.0f, -2.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraLookAt   = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp       = glm::vec3(0.0f, 1.0f, 0.0f);
 
-const float cameraSpeed = 0.05f;
+const float cameraSpeed = 0.1f;
 
 int main(int argc, char * argv[]) {
 
@@ -138,6 +138,7 @@ int main(int argc, char * argv[]) {
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
     while (glfwWindowShouldClose(mWindow) == false) {
+        // Handle user input 
         handleKeypress(mWindow);
 
         // Background Fill Color
@@ -178,6 +179,7 @@ void handleKeypress(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
 
     glm::vec3 v = glm::cross(cameraLookAt, cameraUp);
+    cout << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << endl;
 
     // WSAD movement 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -185,7 +187,7 @@ void handleKeypress(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         cameraPosition -= cameraSpeed * cameraLookAt;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
 }
