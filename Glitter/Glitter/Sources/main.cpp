@@ -24,32 +24,52 @@ using namespace std;
 
 void handleKeypress(GLFWwindow* window);
 
+void handleMouse(GLFWwindow* window, double xPos, double yPos);
+
 // ------------------------------------------------ CAMERA SETTINGS ------------------------------------------------
+int windowWidth = mWidth;
+int windowHeight = mHeight;
+
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraLookAt   = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp       = glm::vec3(0.0f, 1.0f, 0.0f);
 
 const float cameraSpeed = 0.1f;
+const float FOV = 80.0f;
+const float nearClip = 0.001f;
+const float farClip = 10000.0f;
+
+// ------------------------------------------------ MOUSE SETTINGS ------------------------------------------------
+bool firstMouse = true;
+float lastX = windowWidth / 2;
+float lastY = windowHeight / 2;
+
 
 int main(int argc, char * argv[]) {
-
+    
+    // ------------------------------------------------ WINDOW SETTINGS ------------------------------------------------
     // Load GLFW and Create a Window
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow = glfwCreateWindow(mWidth, mHeight, "Bumble Bumpers", nullptr, nullptr);
+    auto mWindow = glfwCreateWindow(windowWidth, windowHeight, "Bumble Bumpers", nullptr, nullptr);
 
-    int windowWidth, windowHeight;
-    glfwGetWindowSize(mWindow, &windowWidth, &windowHeight);
+    
+    //glfwGetWindowSize(mWindow, &windowWidth, &windowHeight);
 
     // Check for Valid Context
     if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
         return EXIT_FAILURE;
     }
+
+    // Window mouse settings 
+    glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(mWindow, handleMouse);
 
     // Create Context and Load OpenGL Functions
     glfwMakeContextCurrent(mWindow);
@@ -131,7 +151,7 @@ int main(int argc, char * argv[]) {
     glUseProgram(myShader);
 
     // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
-    glm::mat4 persp = glm::perspective(50.0f, (float)windowWidth / (float)windowHeight, 0.001f, 10000.0f);
+    glm::mat4 persp = glm::perspective(FOV, (float)windowWidth / (float)windowHeight, nearClip, farClip);
     GLint perspLoc = glGetUniformLocation(myShader, "persp");
     glUniformMatrix4fv(perspLoc, 1, GL_FALSE, glm::value_ptr(persp));
 	
@@ -190,4 +210,8 @@ void handleKeypress(GLFWwindow* window) {
         cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+}
+
+void handleMouse(GLFWwindow* window, double xPos, double yPos) {
+
 }
