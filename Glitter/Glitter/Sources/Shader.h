@@ -9,12 +9,12 @@
 
 using namespace std;
 
-class Shader {
+class MeshShader {
 public:
 	GLuint ID;
 
-	Shader(const char* vertexPath, const char* fragmentPath) {
-		LoadProgram(vertexPath, fragmentPath);
+	MeshShader(const char* vertexPath, const char* fragmentPath) {
+		ID = LoadProgram(vertexPath, fragmentPath);
 	}
 
 	void use() {

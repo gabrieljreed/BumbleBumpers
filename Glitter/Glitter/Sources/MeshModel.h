@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class Model {
+class MeshModel {
 public: 
 
 	vector<mlVertex> vertices;
@@ -18,16 +18,18 @@ public:
 
     GLuint VAO, EBO, VBO;
 
+    MeshModel(string ObjectName) {
+        setupModel(ObjectName);
+    }
+
 	int setupModel(string ObjectName) {
         // ------------------------------------------------ MESH ------------------------------------------------
         mlModel model;
-		if (!LoadModel("../Models", "TestCrayon.obj", model)) return -1;
+        string path = ObjectName + ".obj";
+		if (!LoadModel("../Models", path, model)) return -1;
 
 		// Store data from objects 
-		vector<mlVertex> verts;
-		vector<GLuint> indices;
-
-		verts = model.meshes[0].vertices;
+		vertices = model.meshes[0].vertices;
 		indices = model.meshes[0].indices;
 
         // ------------------------------------------------ TEXTURES ------------------------------------------------
@@ -57,8 +59,6 @@ public:
         }
 
         // ------------------------------------------------ SHADER ------------------------------------------------
-        // Import shader code
-        GLuint myShader = LoadProgram("../Glitter/Shaders/basic.vert", "../Glitter/Shaders/basic.frag");
 
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &EBO);
@@ -71,8 +71,8 @@ public:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
         glBufferData(GL_ARRAY_BUFFER,
-            verts.size() * sizeof(mlVertex),
-            &verts[0],
+            vertices.size() * sizeof(mlVertex),
+            &vertices[0],
             GL_STATIC_DRAW);
 
         // Position attribute 
@@ -89,7 +89,7 @@ public:
 		return 0;
 	}
 
-    void Draw(Shader& shader) {  // FIXME: Might not need to pass in the shader 
+    void Draw(MeshShader& shader) {  // FIXME: Might not need to pass in the shader 
         glBindVertexArray(VAO);                                                     // Bind VAO
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
         glBindVertexArray(0);                                                       // Unbind VAO 
