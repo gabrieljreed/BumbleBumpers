@@ -86,15 +86,17 @@ int main(int argc, char * argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
-    MeshShader crayonShader("../Glitter/Shaders/basic.vert", "../Glitter/Shaders/basic.frag");
+    MeshShader sceneShader = MeshShader();
 
-    MeshModel crayon("TestCrayon");
+    MeshModel crayon("TestCrayon", "orangeCrayon.png");
 
-    crayonShader.use();
+    MeshModel floor("Floor", "orangeCrayon.png");
+
+    sceneShader.use();
 
     // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
     glm::mat4 persp = glm::perspective(FOV, (float)windowWidth / (float)windowHeight, nearClip, farClip);
-    crayonShader.setMat4("persp", persp);
+    sceneShader.setMat4("persp", persp);
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
@@ -109,7 +111,7 @@ int main(int argc, char * argv[]) {
         // View matrix 
         glm::mat4 view = glm::mat4(1.0f);
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
-        crayonShader.setMat4("view", view);
+        sceneShader.setMat4("view", view);
         
 
         // Transformation matrix 
@@ -118,9 +120,12 @@ int main(int argc, char * argv[]) {
         transform = glm::rotate(transform, 3.14f, glm::vec3(1.0f, 0.0f, 0.0f));
         transform = glm::rotate(transform, 3.14f / 4, glm::vec3(0.0f, 1.0f, 0.0f));
         transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
-        crayonShader.setMat4("transform", transform);
+        sceneShader.setMat4("transform", transform);
 
-        crayon.Draw(crayonShader);
+        // FIXME: Need to be able to translate objects individually 
+
+        crayon.Draw(sceneShader);
+        floor.Draw(sceneShader);
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
@@ -144,6 +149,12 @@ void handleKeypress(GLFWwindow* window) {
         cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+
+    // E and C for up/down movement 
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        cameraPosition -= cameraUp * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+        cameraPosition += cameraUp * cameraSpeed;
 }
 
 void handleMouse(GLFWwindow* window, double xPos, double yPos) {

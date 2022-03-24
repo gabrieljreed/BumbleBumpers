@@ -18,11 +18,11 @@ public:
 
     GLuint VAO, EBO, VBO;
 
-    MeshModel(string ObjectName) {
-        setupModel(ObjectName);
+    MeshModel(string ObjectName, string TextureName) {
+        setupModel(ObjectName, TextureName);
     }
 
-	int setupModel(string ObjectName) {
+	int setupModel(string ObjectName, string TextureName) {
         // ------------------------------------------------ MESH ------------------------------------------------
         mlModel model;
         string path = ObjectName + ".obj";
@@ -48,7 +48,8 @@ public:
 
         // Read in textures
         int width, height, channels;
-        unsigned char* imageData = stbi_load("../Textures/orangeCrayon.png", &width, &height, &channels, 3);
+        string texturePath = "../Textures/" + TextureName;
+        unsigned char* imageData = stbi_load(texturePath.c_str(), &width, &height, &channels, 3);
         if (!imageData) return 0;
 
         if (imageData) {

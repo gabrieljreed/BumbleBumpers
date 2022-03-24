@@ -13,8 +13,16 @@ class MeshShader {
 public:
 	GLuint ID;
 
+	MeshShader() {
+		ID = LoadProgram("../Glitter/Shaders/basic.vert", "../Glitter/Shaders/basic.frag");
+	}
+
 	MeshShader(const char* vertexPath, const char* fragmentPath) {
 		ID = LoadProgram(vertexPath, fragmentPath);
+	}
+
+	MeshShader(int i) {
+
 	}
 
 	void use() {
