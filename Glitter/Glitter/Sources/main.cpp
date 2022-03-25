@@ -144,10 +144,10 @@ void handleKeypress(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
 
-    // E and C for up/down movement 
+    // E and Q for up/down movement 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         cameraPosition -= cameraUp * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         cameraPosition += cameraUp * cameraSpeed;
 }
 
@@ -166,7 +166,7 @@ void handleMouse(GLFWwindow* window, double xPos, double yPos) {
     xOffset *= mouseSensitivity;
     yOffset *= mouseSensitivity;
 
-    yaw += xOffset;
+    yaw -= xOffset;
     pitch += yOffset;
 
     // Clamp values so they don't go over 
