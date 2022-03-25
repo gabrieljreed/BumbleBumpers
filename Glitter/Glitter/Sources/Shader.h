@@ -21,10 +21,6 @@ public:
 		ID = LoadProgram(vertexPath, fragmentPath);
 	}
 
-	MeshShader(int i) {
-
-	}
-
 	void use() {
 		glUseProgram(ID);
 	}

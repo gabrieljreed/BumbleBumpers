@@ -86,15 +86,22 @@ int main(int argc, char * argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
+    // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
+
     MeshShader sceneShader = MeshShader();
+
+    vector<MeshModel> meshes;
 
     MeshModel crayon("TestCrayon", "orangeCrayon.png");
     crayon.translate(glm::vec3(0.0f, 0.05f, -10.0f));
+    meshes.push_back(crayon);
 
-    MeshModel crayon2("TestCrayon", "orangeCrayon.png");
+    MeshModel crayon2("TestCrayon", "blueCrayon.png");
     crayon2.translate(glm::vec3(2.0f, 0.05f, -10.0f));
+    meshes.push_back(crayon2);
 
-    MeshModel floor("Floor", "orangeCrayon.png");
+    MeshModel floor("Floor", "blueCrayon.png");
+    meshes.push_back(floor);
 
     sceneShader.use();
 
@@ -117,9 +124,9 @@ int main(int argc, char * argv[]) {
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
 
-        crayon.Draw(sceneShader);
-        crayon2.Draw(sceneShader);
-        //floor.Draw(sceneShader);
+        for (unsigned int i = 0; i < meshes.size(); i++) {
+            meshes[i].Draw(sceneShader);
+        }
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);

@@ -24,6 +24,10 @@ public:
     glm::mat4 rotateMat; 
     glm::mat4 scaleMat;
 
+    // Texture parameters 
+    unsigned char* imageData;
+    int width, height;
+
     MeshModel(string ObjectName, string TextureName) {
         setupModel(ObjectName, TextureName);
 
@@ -49,6 +53,7 @@ public:
         glGenTextures(1, &texture);
 
         // Bind texture 
+        glActiveTexture(0);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // Texture wrapping parameters 
@@ -58,9 +63,9 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         // Read in textures
-        int width, height, channels;
+        int channels;
         string texturePath = "../Textures/" + TextureName;
-        unsigned char* imageData = stbi_load(texturePath.c_str(), &width, &height, &channels, 3);
+        imageData = stbi_load(texturePath.c_str(), &width, &height, &channels, 3);
         if (!imageData) return 0;
 
         if (imageData) {
@@ -102,6 +107,10 @@ public:
 	}
 
     void Draw(MeshShader& shader) {
+        if (imageData) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+        }
+
         transform = translateMat * rotateMat * scaleMat;
         shader.setMat4("transform", transform);
 
