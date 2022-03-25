@@ -5,6 +5,7 @@
 #include "ModelLoader.h"
 #include "MeshModel.h"
 #include "Shader.h"
+#include "InputHandler.h"
 
 
 // System Headers
@@ -25,33 +26,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
-
-void handleKeypress(GLFWwindow* window);
-
-void handleMouse(GLFWwindow* window, double xPos, double yPos);
-
-// ------------------------------------------------ CAMERA SETTINGS ------------------------------------------------
-int windowWidth = mWidth;
-int windowHeight = mHeight;
-
-glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraLookAt   = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp       = glm::vec3(0.0f, 1.0f, 0.0f);
-
-const float cameraSpeed = 0.1f;
-const float FOV = 80.0f;
-const float nearClip = 0.001f;
-const float farClip = 10000.0f;
-
-// ------------------------------------------------ MOUSE SETTINGS ------------------------------------------------
-bool firstMouse = true;
-float lastX = windowWidth / 2;
-float lastY = windowHeight / 2;
-float pitch = 0.0f;
-float yaw = -90.0f;
-
-const float mouseSensitivity = 0.1f;
-
 
 int main(int argc, char * argv[]) {
     
@@ -134,58 +108,4 @@ int main(int argc, char * argv[]) {
     }   glfwTerminate();
 
     return EXIT_SUCCESS;
-}
-
-void handleKeypress(GLFWwindow* window) {
-    // Esc to quit 
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    // WSAD movement 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPosition += cameraSpeed * cameraLookAt;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPosition -= cameraSpeed * cameraLookAt;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
-
-    // E and Q for up/down movement 
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        cameraPosition -= cameraUp * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        cameraPosition += cameraUp * cameraSpeed;
-}
-
-void handleMouse(GLFWwindow* window, double xPos, double yPos) {
-    if (firstMouse) {
-        lastX = xPos;
-        lastY = yPos;
-        firstMouse = false;
-    }
-
-    float xOffset = xPos - lastX;
-    float yOffset = yPos - lastY;
-    lastX = xPos;
-    lastY = yPos;
-
-    xOffset *= mouseSensitivity;
-    yOffset *= mouseSensitivity;
-
-    yaw -= xOffset;
-    pitch += yOffset;
-
-    // Clamp values so they don't go over 
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-    cameraLookAt = glm::normalize(direction);
 }
