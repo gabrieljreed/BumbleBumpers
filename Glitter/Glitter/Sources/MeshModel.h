@@ -18,8 +18,19 @@ public:
 
     GLuint VAO, EBO, VBO;
 
+    glm::mat4 transform;
+
+    glm::mat4 translateMat;
+    glm::mat4 rotateMat; 
+    glm::mat4 scaleMat;
+
     MeshModel(string ObjectName, string TextureName) {
         setupModel(ObjectName, TextureName);
+
+        //transform = glm::mat4(1.0f);
+        translateMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        rotateMat = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1, 0, 0));
+        scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
     }
 
 	int setupModel(string ObjectName, string TextureName) {
@@ -84,22 +95,31 @@ public:
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        glEnable(GL_DEPTH_TEST);
+        
 
 
 		return 0;
 	}
 
-    void Draw(MeshShader& shader) {  // FIXME: Might not need to pass in the shader 
+    void Draw(MeshShader& shader) {
+        transform = translateMat * rotateMat * scaleMat;
+        shader.setMat4("transform", transform);
+
         glBindVertexArray(VAO);                                                     // Bind VAO
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
         glBindVertexArray(0);                                                       // Unbind VAO 
     }
 
-    void translate();
+    void translate(glm::vec3 translateAmount) {
+        translateMat = glm::translate(glm::mat4(1.0f), translateAmount);
+    }
 
-    void rotate();
+    void rotate(float degrees, glm::vec3 direction) {
+        rotateMat = glm::rotate(glm::mat4(1.0f), degrees, direction);
+    }
 
-    void scale();
+    void scale(glm::vec3 scaleAmount) {
+        scaleMat = glm::scale(glm::mat4(1.0f), scaleAmount);
+    }
 };
 

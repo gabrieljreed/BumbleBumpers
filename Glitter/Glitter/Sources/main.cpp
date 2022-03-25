@@ -89,6 +89,10 @@ int main(int argc, char * argv[]) {
     MeshShader sceneShader = MeshShader();
 
     MeshModel crayon("TestCrayon", "orangeCrayon.png");
+    crayon.translate(glm::vec3(0.0f, 0.05f, -10.0f));
+
+    MeshModel crayon2("TestCrayon", "orangeCrayon.png");
+    crayon2.translate(glm::vec3(2.0f, 0.05f, -10.0f));
 
     MeshModel floor("Floor", "orangeCrayon.png");
 
@@ -112,20 +116,10 @@ int main(int argc, char * argv[]) {
         glm::mat4 view = glm::mat4(1.0f);
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
-        
-
-        // Transformation matrix 
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(0.0f, 0.05f, -10.0f));
-        transform = glm::rotate(transform, 3.14f, glm::vec3(1.0f, 0.0f, 0.0f));
-        transform = glm::rotate(transform, 3.14f / 4, glm::vec3(0.0f, 1.0f, 0.0f));
-        transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
-        sceneShader.setMat4("transform", transform);
-
-        // FIXME: Need to be able to translate objects individually 
 
         crayon.Draw(sceneShader);
-        floor.Draw(sceneShader);
+        crayon2.Draw(sceneShader);
+        //floor.Draw(sceneShader);
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
