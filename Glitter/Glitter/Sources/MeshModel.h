@@ -28,6 +28,9 @@ public:
     unsigned char* imageData;
     int width, height;
 
+    bool direction;
+    float pacePosition;
+
     MeshModel(string ObjectName, string TextureName) {
         setupModel(ObjectName, TextureName);
 
@@ -35,6 +38,9 @@ public:
         translateMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
         rotateMat = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1, 0, 0));
         scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
+
+        direction = true;
+        pacePosition = 0.0f;
     }
 
 	int setupModel(string ObjectName, string TextureName) {
@@ -129,6 +135,42 @@ public:
 
     void scale(glm::vec3 scaleAmount) {
         scaleMat = glm::scale(glm::mat4(1.0f), scaleAmount);
+    }
+
+    void pace(float speed, float range, glm::vec3 center, char axis) {
+        if (direction) {
+            pacePosition += speed;
+        }
+        else {
+            pacePosition -= speed;
+        }
+
+        if (pacePosition > range) {
+            direction = false;
+        }
+        else if (pacePosition < -range) {
+            direction = true;
+        }
+
+        glm::vec3 translateAxis;
+
+        if (axis == 'x') {
+            translateAxis = glm::vec3(pacePosition, 0, 0);
+        }
+        else if (axis == 'y') {
+            translateAxis = glm::vec3(0, pacePosition, 0);
+        }
+        else if (axis == 'z') {
+            translateAxis = glm::vec3(0, 0, pacePosition);
+        }
+        else {
+            translateAxis = glm::vec3(0, 0, 0);
+            cout << "ERROR - INVALID AXIS" << endl; 
+        }
+
+        glm::vec3 translateAmount = center + translateAxis;
+
+        translate(translateAmount);
     }
 };
 

@@ -49,11 +49,16 @@ int main(int argc, char * argv[]) {
     MeshModel floor("Floor", "blueCrayon.png");
     meshes.push_back(floor);
 
+    MeshModel giraffe("Giraffe", "orangeCrayon.png"); // FIXME: I think this isn't working properly because it's only grabbing the first mesh, which is the sunglasses 
+
     sceneShader.use();
 
     // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
     glm::mat4 persp = glm::perspective(FOV, (float)windowWidth / (float)windowHeight, nearClip, farClip);
     sceneShader.setMat4("persp", persp);
+
+    float f = 0.0f;
+    bool direction = true;
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
@@ -69,6 +74,10 @@ int main(int argc, char * argv[]) {
         glm::mat4 view = glm::mat4(1.0f);
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
+
+        // Animation 
+        meshes[0].pace(0.1, 5, glm::vec3(0.0f, 0.05f, -10.0f), 'x');
+        meshes[1].pace(0.2, 12, glm::vec3(2.0f, 0.05f, -10.0f), 'z');
 
         for (unsigned int i = 0; i < meshes.size(); i++) {
             meshes[i].Draw(sceneShader);
