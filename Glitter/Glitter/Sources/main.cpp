@@ -49,7 +49,9 @@ int main(int argc, char * argv[]) {
     MeshModel floor("Floor", "blueCrayon.png");
     meshes.push_back(floor);
 
-    MeshModel giraffe("Giraffe", "orangeCrayon.png"); // FIXME: I think this isn't working properly because it's only grabbing the first mesh, which is the sunglasses 
+    MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
+    giraffe.rotate(180, glm::vec3(1, 0, 0));
+    meshes.push_back(giraffe);
 
     sceneShader.use();
 
@@ -75,9 +77,9 @@ int main(int argc, char * argv[]) {
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
 
-        // Animation 
-        meshes[0].pace(0.1, 5, glm::vec3(0.0f, 0.05f, -10.0f), 'x');
-        meshes[1].pace(0.2, 12, glm::vec3(2.0f, 0.05f, -10.0f), 'z');
+        //// Animation 
+        //meshes[0].pace(0.1, 5, glm::vec3(0.0f, 0.05f, -10.0f), 'x');
+        //meshes[1].pace(0.2, 12, glm::vec3(2.0f, 0.05f, -10.0f), 'z');
 
         for (unsigned int i = 0; i < meshes.size(); i++) {
             meshes[i].Draw(sceneShader);

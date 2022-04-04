@@ -2,11 +2,14 @@
 
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 #include "glitter.hpp"
 #include "ShaderHelpers.h"
 #include "ModelLoader.h"
 #include "Shader.h"
+
+# define pi           3.14159265358979323846
 
 using namespace std;
 
@@ -50,8 +53,16 @@ public:
 		if (!LoadModel("../Models", path, model)) return -1;
 
 		// Store data from objects 
-		vertices = model.meshes[0].vertices;
-		indices = model.meshes[0].indices;
+		/*vertices = model.meshes[0].vertices;
+		indices = model.meshes[0].indices;*/
+
+        for (unsigned int i = 0; i < model.meshes.size(); i++) {
+            /*vertices += model.meshes[i].vertices;
+            indices += model.meshes[i].indices;*/
+
+            vertices.insert(vertices.end(), model.meshes[i].vertices.begin(), model.meshes[i].vertices.end());
+            indices.insert(indices.end(), model.meshes[i].indices.begin(), model.meshes[i].indices.end());
+        }
 
         // ------------------------------------------------ TEXTURES ------------------------------------------------
         // Genereate texture ID 
@@ -130,6 +141,7 @@ public:
     }
 
     void rotate(float degrees, glm::vec3 direction) {
+        degrees *= 180 / pi;
         rotateMat = glm::rotate(glm::mat4(1.0f), degrees, direction);
     }
 
@@ -171,6 +183,10 @@ public:
         glm::vec3 translateAmount = center + translateAxis;
 
         translate(translateAmount);
+    }
+
+    void launch() {
+
     }
 };
 
