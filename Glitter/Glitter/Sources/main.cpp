@@ -27,6 +27,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <WindowHandler.h>
 
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 using namespace std;
 
 int main(int argc, char * argv[]) {
@@ -40,6 +43,8 @@ int main(int argc, char * argv[]) {
     map<string, MeshModel> objects;
     map<string, MeshModel>::iterator iter;
 
+    // To insert objects into the scene, declare them here and add them to the objects map with a unique name
+
     MeshModel crayon("TestCrayon", "orangeCrayon.png", glm::vec3(0.0f, 0.05f, -10.0f));
     objects.insert({ "OrangeCrayon", crayon });
 
@@ -50,7 +55,7 @@ int main(int argc, char * argv[]) {
     objects.insert({ "Floor", floor });
 
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
-    giraffe.rotate(180, glm::vec3(1, 0, 0)); // FIXME: Rotation is weird 
+    giraffe.rotate(180, glm::vec3(1, 0, 0));
     objects.insert({ "Giraffe", giraffe });
 
     sceneShader.use();
@@ -61,12 +66,31 @@ int main(int argc, char * argv[]) {
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
+    float startTime = 0.0f;
+    bool giraffeHit = false;
+
     while (glfwWindowShouldClose(mWindow) == false) {
+        // Time
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         // Handle user input 
         handleKeypress(mWindow);
 
         if (glfwGetKey(mWindow, GLFW_KEY_P) == GLFW_PRESS) {
             objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
+
+            startTime = static_cast<float>(glfwGetTime());
+            giraffeHit = true;
+        }
+
+        if (currentFrame - startTime > 2 && giraffeHit) {
+            // Kill after 2 seconds
+            // This only works if you hit one giraffe at a time
+            // Might need to revisit this if we want to do more than that  
+            objects.erase("OrangeCrayon");
+            giraffeHit = false;
         }
 
         // Background Fill Color/Clear each frame 

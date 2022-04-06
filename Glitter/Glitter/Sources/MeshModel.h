@@ -180,8 +180,7 @@ public:
     }
 
     void rotate(float degrees, glm::vec3 direction) {
-        degrees *= 180 / pi;
-        rotateMat = glm::rotate(glm::mat4(1.0f), degrees, direction);
+        rotateMat = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), direction);
     }
 
     void scale(glm::vec3 scaleAmount) {
