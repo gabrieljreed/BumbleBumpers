@@ -31,8 +31,19 @@ public:
     unsigned char* imageData;
     int width, height;
 
+    // Object params 
+    glm::vec3 position;
+    glm::vec3 objectScale;
+
+    // Movement parameters 
     bool direction;
     float pacePosition;
+
+    // Launch params 
+    bool launching;
+    glm::vec3 launchDirection;
+    float launchSpeed;
+    
 
     MeshModel(string ObjectName, string TextureName) {
         setupModel(ObjectName, TextureName);
@@ -42,8 +53,31 @@ public:
         rotateMat = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1, 0, 0));
         scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
 
+        position = glm::vec3(0, 0, 0);
+        objectScale = glm::vec3(1, 1, 1);
+
         direction = true;
         pacePosition = 0.0f;
+        
+
+        launching = false;
+    }
+
+    MeshModel(string ObjectName, string TextureName, glm::vec3 initPosition) {
+        setupModel(ObjectName, TextureName);
+
+        //transform = glm::mat4(1.0f);
+        translateMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        rotateMat = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1, 0, 0));
+        scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
+
+        direction = true;
+        pacePosition = 0.0f;
+        position = initPosition;
+
+        launching = false;
+
+        translate(position);
     }
 
 	int setupModel(string ObjectName, string TextureName) {
@@ -131,13 +165,18 @@ public:
         transform = translateMat * rotateMat * scaleMat;
         shader.setMat4("transform", transform);
 
+        if (launching) {
+            translate(launchDirection * launchSpeed);
+        }
+
         glBindVertexArray(VAO);                                                     // Bind VAO
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
         glBindVertexArray(0);                                                       // Unbind VAO 
     }
 
     void translate(glm::vec3 translateAmount) {
-        translateMat = glm::translate(glm::mat4(1.0f), translateAmount);
+        position += translateAmount;
+        translateMat = glm::translate(glm::mat4(1.0f), position);
     }
 
     void rotate(float degrees, glm::vec3 direction) {
@@ -146,7 +185,8 @@ public:
     }
 
     void scale(glm::vec3 scaleAmount) {
-        scaleMat = glm::scale(glm::mat4(1.0f), scaleAmount);
+        objectScale *= scaleAmount;
+        scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
     }
 
     void pace(float speed, float range, glm::vec3 center, char axis) {
@@ -185,8 +225,10 @@ public:
         translate(translateAmount);
     }
 
-    void launch() {
-
+    void launch(glm::vec3 direction, float speed) {
+        launching = true;
+        launchDirection = direction;
+        launchSpeed = speed;
     }
 };
 
