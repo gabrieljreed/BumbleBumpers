@@ -87,13 +87,7 @@ public:
 		if (!LoadModel("../Models", path, model)) return -1;
 
 		// Store data from objects 
-		/*vertices = model.meshes[0].vertices;
-		indices = model.meshes[0].indices;*/
-
         for (unsigned int i = 0; i < model.meshes.size(); i++) {
-            /*vertices += model.meshes[i].vertices;
-            indices += model.meshes[i].indices;*/
-
             vertices.insert(vertices.end(), model.meshes[i].vertices.begin(), model.meshes[i].vertices.end());
             indices.insert(indices.end(), model.meshes[i].indices.begin(), model.meshes[i].indices.end());
         }
@@ -151,6 +145,10 @@ public:
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
+        // Normal attribute 
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+
         
 
 
@@ -184,6 +182,11 @@ public:
     }
 
     void scale(glm::vec3 scaleAmount) {
+        objectScale *= scaleAmount;
+        scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
+    }
+
+    void scale(float scaleAmount) {
         objectScale *= scaleAmount;
         scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
     }

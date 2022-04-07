@@ -37,7 +37,12 @@ int main(int argc, char * argv[]) {
     auto mWindow = windowSetup();
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
+    // Lighting
+    glm::vec3 lightPosition(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+    
 
+    // Meshes
     MeshShader sceneShader = MeshShader();
 
     map<string, MeshModel> objects;
@@ -55,7 +60,8 @@ int main(int argc, char * argv[]) {
     objects.insert({ "Floor", floor });
 
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
-    giraffe.rotate(180, glm::vec3(1, 0, 0));
+    giraffe.rotate(180, glm::vec3(1, 0, 0)); // Giraffe model always needs to be rotated 180 degrees 
+    giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
 
     sceneShader.use();
@@ -63,6 +69,9 @@ int main(int argc, char * argv[]) {
     // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
     glm::mat4 persp = glm::perspective(FOV, (float)windowWidth / (float)windowHeight, nearClip, farClip);
     sceneShader.setMat4("persp", persp);
+
+    sceneShader.setVec3("lightColor", lightColor);
+    sceneShader.setVec3("lightPosition", lightPosition);
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 

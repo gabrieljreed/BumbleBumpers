@@ -30,5 +30,10 @@ public:
 		GLint location = glGetUniformLocation(ID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
+
+	void setVec3(const string& name, glm::vec3 vec) {
+		GLint location = glGetUniformLocation(ID, name.c_str());
+		glUniform3fv(location, 1, glm::value_ptr(vec));
+	}
 };
 
