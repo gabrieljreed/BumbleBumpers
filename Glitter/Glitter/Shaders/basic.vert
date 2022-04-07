@@ -15,6 +15,6 @@ void main()
 {
 	FragPos = vec3(transform * vec4(aPos, 1.0));
 	TexCoord = aTexCoord;
-	Normal = aNormal;
+	Normal = mat3(transpose(inverse(transform))) * aNormal;
 	gl_Position = persp * view * transform * vec4(aPos, 1.0);
 }

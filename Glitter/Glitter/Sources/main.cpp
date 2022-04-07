@@ -38,9 +38,8 @@ int main(int argc, char * argv[]) {
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
-    glm::vec3 lightPosition(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightPosition(1.0f, 1.0f, 0.1f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-    
 
     // Meshes
     MeshShader sceneShader = MeshShader();
@@ -54,6 +53,7 @@ int main(int argc, char * argv[]) {
     objects.insert({ "OrangeCrayon", crayon });
 
     MeshModel crayon2("TestCrayon", "blueCrayon.png", glm::vec3(2.0f, 0.05f, -10.0f));
+    crayon2.rotate(180, glm::vec3(1, 0, 0));
     objects.insert({ "BlueCrayon", crayon2 });
 
     MeshModel floor("Floor", "blueCrayon.png");

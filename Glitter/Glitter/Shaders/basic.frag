@@ -19,7 +19,8 @@ void main() {
 
     // Diffuse
     vec3 norm = normalize(Normal);
-    vec3 lightDirection = normalize(lightPosition - FragPos);
+    //vec3 lightDirection = normalize(lightPosition - FragPos);  // Point light-ish
+    vec3 lightDirection = normalize(-lightPosition); // Directional light 
     float diff = max(dot(norm, lightDirection), 0.0);
     vec3 diffuse = lightColor * diff;
 
