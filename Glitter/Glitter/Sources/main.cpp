@@ -56,13 +56,15 @@ int main(int argc, char * argv[]) {
     crayon2.rotate(180, glm::vec3(1, 0, 0));
     objects.insert({ "BlueCrayon", crayon2 });
 
-    MeshModel floor("Floor", "blueCrayon.png");
-    objects.insert({ "Floor", floor });
-
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
     giraffe.rotate(180, glm::vec3(1, 0, 0)); // Giraffe model always needs to be rotated 180 degrees 
     giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
+
+    MeshModel track("TrackFlat_Triangles", "Street.jpg");
+    track.rotate(180, glm::vec3(1, 0, 0));
+    track.scale(glm::vec3(2, 2, 2));
+    objects.insert({ "Track", track });
 
     sceneShader.use();
 
