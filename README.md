@@ -18,4 +18,6 @@ cmake -G "Visual Studio 16 2019" .
 ...
 ```
 
-Windows: Open Build/Glitter.sln, then right click Glitter in the Solution Explorer and choose "Set as startup project" 
+Windows: Open Build/Glitter.sln, then right click Glitter in the Solution Explorer and choose "Set as startup project". 
+
+In order to get sound to work correctly, after running CMake, copy and paste the files in the "irrKlang Library Files" folder to the Build folder. 
