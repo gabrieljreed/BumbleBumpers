@@ -6,7 +6,7 @@
 #include "MeshModel.h"
 #include "Shader.h"
 #include "InputHandler.h"
-
+#include "irrKlang.h"
 
 // System Headers
 #include <glad/glad.h>
@@ -30,11 +30,17 @@
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-using namespace std;
+#pragma comment(lib, "irrKlang.lib")
+
+using namespace irrklang;
 
 int main(int argc, char * argv[]) {
 
     auto mWindow = windowSetup();
+
+    ISoundEngine* engine = createIrrKlangDevice();
+    if (!engine)
+        return 0; // Error starting up sound device 
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
@@ -90,6 +96,8 @@ int main(int argc, char * argv[]) {
         handleKeypress(mWindow);
 
         if (glfwGetKey(mWindow, GLFW_KEY_P) == GLFW_PRESS) {
+            engine->play2D("../Audio/boing1.wav");
+
             objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
 
             startTime = static_cast<float>(glfwGetTime());
@@ -126,5 +134,7 @@ int main(int argc, char * argv[]) {
         glfwPollEvents();
     }   glfwTerminate();
 
+    engine->drop();
+    
     return EXIT_SUCCESS;
 }
