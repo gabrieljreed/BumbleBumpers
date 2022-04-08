@@ -32,13 +32,13 @@ float lastFrame = 0.0f;
 
 #pragma comment(lib, "irrKlang.lib")
 
-using namespace irrklang;
+using namespace std;
 
 int main(int argc, char * argv[]) {
 
     auto mWindow = windowSetup();
 
-    ISoundEngine* engine = createIrrKlangDevice();
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
     if (!engine)
         return 0; // Error starting up sound device 
 
