@@ -19,7 +19,7 @@ glm::vec3 cameraLookAt = glm::vec3(0.0f, -2.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
-const float cameraSpeed = 0.1f;
+const float cameraSpeed = 0.3f;
 const float FOV = 80.0f;
 const float nearClip = 0.001f;
 const float farClip = 10000.0f;
