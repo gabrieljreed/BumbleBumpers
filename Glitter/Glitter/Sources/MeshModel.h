@@ -178,6 +178,11 @@ public:
         translateMat = glm::translate(glm::mat4(1.0f), position);
     }
 
+    void translate(const float& x, const float& y, const float& z) {
+        glm::vec3 translateAmount = glm::vec3(x, y, z);
+        translate(translateAmount);
+    }
+
     void rotate(float degrees, glm::vec3 direction) {
         rotateMat = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), direction);
     }
@@ -190,6 +195,17 @@ public:
     void scale(float scaleAmount) {
         objectScale *= scaleAmount;
         scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
+    }
+
+    void scale(const float& x, const float& y, const float& z) {
+        glm::vec3 scaleAmount = glm::vec3(x, y, z);
+        scale(scaleAmount);
+    }
+
+    void resetTransformations() {
+        position = glm::vec3(0, 0, 0);
+        objectScale = glm::vec3(1, 1, 1);
+        rotate(180, glm::vec3(1, 0, 0));
     }
 
     void pace(float speed, float range, glm::vec3 center, char axis) {

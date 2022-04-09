@@ -45,7 +45,7 @@ int main(int argc, char * argv[]) {
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
-    glm::vec3 lightPosition(1.0f, 1.0f, 0.1f);
+    glm::vec3 lightPosition(1.0f, 1.0f, 0.5f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
     // Meshes
@@ -55,12 +55,6 @@ int main(int argc, char * argv[]) {
     map<string, MeshModel>::iterator iter;
 
     // To insert objects into the scene, declare them here and add them to the objects map with a unique name
-
-    MeshModel crayon("TestCrayon", "orangeCrayon.png", glm::vec3(0.0f, 0.05f, -10.0f));
-    objects.insert({ "OrangeCrayon", crayon });
-
-    MeshModel crayon2("TestCrayon", "blueCrayon.png", glm::vec3(2.0f, 0.05f, -10.0f));
-    objects.insert({ "BlueCrayon", crayon2 });
 
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
     giraffe.scale(0.5);
