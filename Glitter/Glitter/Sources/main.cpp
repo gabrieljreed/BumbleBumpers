@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "InputHandler.h"
 #include "irrKlang.h"
+#include "TrackSetup.h"
 
 // System Headers
 #include <glad/glad.h>
@@ -59,18 +60,16 @@ int main(int argc, char * argv[]) {
     objects.insert({ "OrangeCrayon", crayon });
 
     MeshModel crayon2("TestCrayon", "blueCrayon.png", glm::vec3(2.0f, 0.05f, -10.0f));
-    crayon2.rotate(180, glm::vec3(1, 0, 0));
     objects.insert({ "BlueCrayon", crayon2 });
 
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
-    giraffe.rotate(180, glm::vec3(1, 0, 0)); // Giraffe model always needs to be rotated 180 degrees 
     giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
 
-    MeshModel track("TrackFlat_Triangles", "Street.jpg");
-    track.rotate(180, glm::vec3(1, 0, 0));
-    track.scale(glm::vec3(2, 2, 2));
-    objects.insert({ "Track", track });
+    map<string, MeshModel> track = setupTrack();
+    for (iter = track.begin(); iter != track.end(); ++iter) {
+        objects.insert({ iter->first, iter->second });
+    }
 
     sceneShader.use();
 
