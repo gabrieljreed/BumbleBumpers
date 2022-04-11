@@ -9,6 +9,7 @@
 #include "TrackSetup.h"
 #include "Gamemode.h"
 #include "TextHandler.h"
+#include "CollisionHandler.h"
 
 // Text Headers
 #include <ft2build.h>
@@ -78,7 +79,10 @@ int main(int argc, char * argv[]) {
     giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
 
-
+    MeshModel bee("beeUV", "beeTexture.png", glm::vec3(0, 0, 0));
+    bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
+    //bee.rotate(90, glm::vec3(0, 1, 0));
+    objects.insert({ "Bee", bee });
 
     map<string, MeshModel> track = setupTrack();
     for (iter = track.begin(); iter != track.end(); ++iter) {
@@ -117,6 +121,7 @@ int main(int argc, char * argv[]) {
 
             startTime = static_cast<float>(glfwGetTime());
             giraffeHit = true;
+            giraffeHit = CheckCollision(objects.at("Giraffe"), objects.at("Bee"));
         }
 
         if (currentFrame - startTime > 2 && giraffeHit) {
