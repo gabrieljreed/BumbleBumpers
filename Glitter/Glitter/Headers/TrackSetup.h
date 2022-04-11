@@ -84,7 +84,7 @@ map<string, MeshModel> setupTrack() {
 	wall.resetTransformations();
 	wall.scale(0.5);
 	wall.scale(1, 1, 9);
-	wall.translate(-38.5, 0, -50);
+	wall.translate(-38.5, 0, -49.5);
 	walls.push_back(wall);
 
 
