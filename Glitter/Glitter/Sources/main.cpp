@@ -8,7 +8,7 @@
 #include "InputHandler.h"
 #include "TrackSetup.h"
 #include "Gamemode.h"
-//#include "TextHandler.h"
+#include "TextHandler.h"
 #include "CollisionHandler.h"
 
 // Text Headers
@@ -49,17 +49,17 @@ int main(int argc, char * argv[]) {
     auto mWindow = windowSetup();
 
     // Audio setup 
-    //irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-    //if (!engine)
-    //    return 0; // Error starting up sound device 
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+    if (!engine)
+        return 0; // Error starting up sound device 
 
     // Text setup 
-    //MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
-    //textShader.use();
+    MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
+    textShader.use();
 
-    //glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
-    //textShader.setMat4("projection", orthoProjection);
-    //setupText();
+    glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
+    textShader.setMat4("projection", orthoProjection);
+    setupText();
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
