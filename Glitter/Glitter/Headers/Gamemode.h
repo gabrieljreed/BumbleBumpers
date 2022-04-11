@@ -1,5 +1,5 @@
 #pragma once
-bool debugMode = false; // Allows camera/player to move up and down the y axis 
+bool debugMode = true; // Allows camera/player to move up and down the y axis 
 
 bool gameStarted = false;
 bool paused = true;

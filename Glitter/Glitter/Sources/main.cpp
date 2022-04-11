@@ -76,7 +76,7 @@ int main(int argc, char * argv[]) {
 
     MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
     giraffe.scale(0.5);
-    objects.insert({ "Giraffe", giraffe });
+    //objects.insert({ "Giraffe", giraffe });
 
     MeshModel bee("beeUV", "beeTexture.png");
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
@@ -150,6 +150,10 @@ int main(int argc, char * argv[]) {
         
         for (iter = objects.begin(); iter != objects.end(); ++iter) {
             iter->second.Draw(sceneShader);
+        }
+
+        if (!gameStarted) {
+            RenderText(textShader, "Press Enter to start!", 25.0, windowHeight / 2, 1.0, glm::vec3(1, 1, 1));
         }
 
         if (gameStarted && !paused) {
