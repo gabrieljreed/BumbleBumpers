@@ -62,6 +62,11 @@ public:
         position = glm::vec3(0, 0, 0);
         objectScale = glm::vec3(1, 1, 1);
 
+        distPosX = _maxX - position.x;
+        distNegX = position.x - _minX;
+        distPosZ = _maxZ - position.z;
+        distNegZ = position.x - _minZ;
+
         direction = true;
         pacePosition = 0.0f;
 
@@ -79,6 +84,11 @@ public:
         direction = true;
         pacePosition = 0.0f;
         position = initPosition;
+
+        distPosX = _maxX - position.x;
+        distNegX = position.x - _minX;
+        distPosZ = _maxZ - position.z;
+        distNegZ = position.x - _minZ;
 
         launching = false;
 
