@@ -78,6 +78,8 @@ int main(int argc, char * argv[]) {
     giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
 
+
+
     map<string, MeshModel> track = setupTrack();
     for (iter = track.begin(); iter != track.end(); ++iter) {
         objects.insert({ iter->first, iter->second });
