@@ -27,6 +27,10 @@ public:
     glm::mat4 rotateMat; 
     glm::mat4 scaleMat;
 
+    //Bounding Box parameters
+    float _maxX, _minX, _maxZ, _minZ;
+    float distNegX, distPosX, distNegZ, distPosZ;
+
     // Texture parameters 
     unsigned char* imageData;
     int width, height;
@@ -92,6 +96,33 @@ public:
             vertices.insert(vertices.end(), model.meshes[i].vertices.begin(), model.meshes[i].vertices.end());
             indices.insert(indices.end(), model.meshes[i].indices.begin(), model.meshes[i].indices.end());
         }
+
+        // ------------------------------------------------ BOUNDING BOX ------------------------------------------------
+
+        float maxX = -1 * std::numeric_limits<float>::infinity();;
+        float minX = std::numeric_limits<float>::infinity();;
+        float maxZ = -1 * std::numeric_limits<float>::infinity();;
+        float minZ = std::numeric_limits<float>::infinity();;
+        for (unsigned int i = 0; i < vertices.size(); i++) {
+            if (vertices[i].position[0] > maxX) {
+                maxX = vertices[i].position[0];
+            }
+            else if (vertices[i].position[0] < minX) {
+                minX = vertices[i].position[0];
+            }
+
+            if (vertices[i].position[2] > maxZ) {
+                maxZ = vertices[i].position[2];
+            }
+            else if (vertices[i].position[2] < minZ) {
+                minZ = vertices[i].position[2];
+            }
+        }
+
+        _maxX = maxX;
+        _minX = minX;
+        _maxZ = maxZ;
+        _minZ = minZ;
 
         // ------------------------------------------------ TEXTURES ------------------------------------------------
         // Genereate texture ID 
