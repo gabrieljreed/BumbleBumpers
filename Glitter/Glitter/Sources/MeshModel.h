@@ -154,6 +154,8 @@ public:
 	}
 
     void Draw(MeshShader& shader) {
+        glBindVertexArray(VAO);                                                     // Bind VAO
+        
         if (imageData) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
         }
@@ -165,7 +167,7 @@ public:
             translate(launchDirection * launchSpeed);
         }
 
-        glBindVertexArray(VAO);                                                     // Bind VAO
+        
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
         glBindVertexArray(0);                                                       // Unbind VAO 
     }
