@@ -9,6 +9,14 @@ void handleKeypress(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
+    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+        paused = false;
+        if (!gameStarted) {
+            gameStarted = true;
+            startTime = static_cast<float>(glfwGetTime());
+        }
+    }
+
     if (!paused) {
         // WSAD movement 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)

@@ -68,7 +68,6 @@ int main(int argc, char * argv[]) {
 
     // Meshes
     MeshShader sceneShader = MeshShader("basic.vert", "basic.frag");
-    
 
     map<string, MeshModel> objects;
     map<string, MeshModel>::iterator iter;
@@ -100,7 +99,7 @@ int main(int argc, char * argv[]) {
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
-    float startTime = 0.0f;
+    //float startTime = 0.0f;
     bool giraffeHit = false;
 
     while (glfwWindowShouldClose(mWindow) == false) {
@@ -114,6 +113,7 @@ int main(int argc, char * argv[]) {
         // Handle user input 
         handleKeypress(mWindow);
 
+
         if (glfwGetKey(mWindow, GLFW_KEY_P) == GLFW_PRESS) {
             //engine->play2D("../Audio/boing1.wav");
 
@@ -126,13 +126,13 @@ int main(int argc, char * argv[]) {
             }
         }
 
-        if (currentFrame - startTime > 2 && giraffeHit) {
-            // Kill after 2 seconds
-            // This only works if you hit one giraffe at a time
-            // Might need to revisit this if we want to do more than that  
-            objects.erase("OrangeCrayon");
-            giraffeHit = false;
-        }
+        //if (currentFrame - startTime > 2 && giraffeHit) {
+        //    // Kill after 2 seconds
+        //    // This only works if you hit one giraffe at a time
+        //    // Might need to revisit this if we want to do more than that  
+        //    objects.erase("OrangeCrayon");
+        //    giraffeHit = false;
+        //}
 
         // Background Fill Color/Clear each frame 
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
@@ -152,9 +152,17 @@ int main(int argc, char * argv[]) {
             iter->second.Draw(sceneShader);
         }
 
-        //textShader.use();
-        //RenderText(textShader, "Test", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        sceneShader.use();
+        if (gameStarted && !paused) {
+            int timeElapsed = (int)(currentFrame - startTime);
+            int timeRemaining = (int)(totalTime - timeElapsed);
+           
+
+            RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            
+            RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
+            
+            sceneShader.use();
+        }
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
