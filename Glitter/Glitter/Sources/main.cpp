@@ -145,7 +145,6 @@ int main(int argc, char * argv[]) {
 
         textShader.use();
         RenderText(textShader, "Test", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-
         sceneShader.use();
 
         // Flip Buffers and Draw
