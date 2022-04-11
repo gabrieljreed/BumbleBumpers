@@ -8,6 +8,7 @@
 #include "InputHandler.h"
 #include "irrKlang.h"
 #include "TrackSetup.h"
+#include "Gamemode.h"
 
 // System Headers
 #include <glad/glad.h>

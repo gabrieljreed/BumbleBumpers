@@ -1,25 +1,33 @@
 #include "InputHandler.h"
+#include "Gamemode.h"
+#include <iostream>
+
+using namespace std;
 
 void handleKeypress(GLFWwindow* window) {
     // Esc to quit 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    // WSAD movement 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPosition += cameraSpeed * cameraLookAt;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPosition -= cameraSpeed * cameraLookAt;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+    if (!paused) {
+        // WSAD movement 
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            cameraPosition += cameraSpeed * cameraLookAt;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            cameraPosition -= cameraSpeed * cameraLookAt;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
 
-    // E and Q for up/down movement 
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        cameraPosition -= cameraUp * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        cameraPosition += cameraUp * cameraSpeed;
+        if (debugMode) {
+            // E and Q for up/down movement 
+            if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+                cameraPosition -= cameraUp * cameraSpeed;
+            if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+                cameraPosition += cameraUp * cameraSpeed;
+        }
+    }
 }
 
 void handleMouse(GLFWwindow* window, double xPos, double yPos) {
@@ -38,8 +46,10 @@ void handleMouse(GLFWwindow* window, double xPos, double yPos) {
     yOffset *= mouseSensitivity;
 
     yaw -= xOffset;
-    pitch += yOffset;
-
+    if (debugMode) {
+        pitch += yOffset;
+    }
+    
     // Clamp values so they don't go over 
     if (pitch > 89.0f)
         pitch = 89.0f;
