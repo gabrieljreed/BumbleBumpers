@@ -17,8 +17,11 @@ public:
 		ID = LoadProgram("../Glitter/Shaders/basic.vert", "../Glitter/Shaders/basic.frag");
 	}
 
-	MeshShader(const char* vertexPath, const char* fragmentPath) {
-		ID = LoadProgram(vertexPath, fragmentPath);
+	MeshShader(string vertexShader, string fragmentShader) {
+		string vertexPath = "../Glitter/Shaders/" + vertexShader;
+		string fragmentPath = "../Glitter/Shaders/" + fragmentShader;
+
+		ID = LoadProgram(vertexPath.c_str(), fragmentPath.c_str());
 	}
 
 	void use() {

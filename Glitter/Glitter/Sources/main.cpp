@@ -6,9 +6,17 @@
 #include "MeshModel.h"
 #include "Shader.h"
 #include "InputHandler.h"
-#include "irrKlang.h"
 #include "TrackSetup.h"
 #include "Gamemode.h"
+#include "TextHandler.h"
+
+// Text Headers
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+// Sound headers
+#include "irrKlang.h"
+#pragma comment(lib, "irrKlang.lib")
 
 // System Headers
 #include <glad/glad.h>
@@ -32,17 +40,25 @@
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-#pragma comment(lib, "irrKlang.lib")
-
 using namespace std;
 
 int main(int argc, char * argv[]) {
 
+    // Window setup 
     auto mWindow = windowSetup();
 
+    // Audio setup 
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
     if (!engine)
         return 0; // Error starting up sound device 
+
+    // Text setup 
+    MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
+    textShader.use();
+
+    glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
+    textShader.setMat4("projection", orthoProjection);
+    setupText();
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
@@ -50,7 +66,8 @@ int main(int argc, char * argv[]) {
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
     // Meshes
-    MeshShader sceneShader = MeshShader();
+    MeshShader sceneShader = MeshShader("basic.vert", "basic.frag");
+    
 
     map<string, MeshModel> objects;
     map<string, MeshModel>::iterator iter;
@@ -81,6 +98,8 @@ int main(int argc, char * argv[]) {
     bool giraffeHit = false;
 
     while (glfwWindowShouldClose(mWindow) == false) {
+        sceneShader.use();
+
         // Time
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -119,9 +138,15 @@ int main(int argc, char * argv[]) {
         //meshes[0].pace(0.1, 5, glm::vec3(0.0f, 0.05f, -10.0f), 'x');
         //meshes[1].pace(0.2, 12, glm::vec3(2.0f, 0.05f, -10.0f), 'z');
 
+        
         for (iter = objects.begin(); iter != objects.end(); ++iter) {
             iter->second.Draw(sceneShader);
         }
+
+        textShader.use();
+        RenderText(textShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        sceneShader.use();
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
