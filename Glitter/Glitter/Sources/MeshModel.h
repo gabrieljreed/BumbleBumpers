@@ -185,6 +185,7 @@ public:
 	}
 
     void Draw(MeshShader& shader) {
+        shader.use();
         glBindVertexArray(VAO);                                                     // Bind VAO
         
         if (imageData) {

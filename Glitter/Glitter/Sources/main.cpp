@@ -150,8 +150,7 @@ int main(int argc, char * argv[]) {
             iter->second.Draw(sceneShader);
         }
 
-        textShader.use();
-        RenderText(textShader, "Test", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        RenderText(textShader, "Number of points:", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         sceneShader.use();
 
         // Flip Buffers and Draw

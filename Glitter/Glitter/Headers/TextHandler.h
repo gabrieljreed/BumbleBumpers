@@ -119,6 +119,7 @@ int setupText() {
 
 void RenderText(MeshShader& shader, std::string text, float x, float y, float scale, glm::vec3 color) {
     // activate corresponding render state	
+    text += " ";
     shader.use();
     glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
@@ -157,6 +158,5 @@ void RenderText(MeshShader& shader, std::string text, float x, float y, float sc
         // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
-    glBindVertexArray(0); // Unbind VAO 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0); // Unbind VAO     
 }
