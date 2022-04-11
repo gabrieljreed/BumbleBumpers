@@ -8,7 +8,7 @@
 #include "InputHandler.h"
 #include "TrackSetup.h"
 #include "Gamemode.h"
-#include "TextHandler.h"
+//#include "TextHandler.h"
 #include "CollisionHandler.h"
 
 // Text Headers
@@ -49,17 +49,17 @@ int main(int argc, char * argv[]) {
     auto mWindow = windowSetup();
 
     // Audio setup 
-    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-    if (!engine)
-        return 0; // Error starting up sound device 
+    //irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+    //if (!engine)
+    //    return 0; // Error starting up sound device 
 
     // Text setup 
-    MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
-    textShader.use();
+    //MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
+    //textShader.use();
 
-    glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
-    textShader.setMat4("projection", orthoProjection);
-    setupText();
+    //glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
+    //textShader.setMat4("projection", orthoProjection);
+    //setupText();
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
     giraffe.scale(0.5);
     objects.insert({ "Giraffe", giraffe });
 
-    MeshModel bee("beeUV", "beeTexture.png", glm::vec3(0, 0, 0));
+    MeshModel bee("beeUV", "beeTexture.png");
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
     //bee.rotate(90, glm::vec3(0, 1, 0));
     objects.insert({ "Bee", bee });
@@ -115,13 +115,15 @@ int main(int argc, char * argv[]) {
         handleKeypress(mWindow);
 
         if (glfwGetKey(mWindow, GLFW_KEY_P) == GLFW_PRESS) {
-            engine->play2D("../Audio/boing1.wav");
+            //engine->play2D("../Audio/boing1.wav");
 
-            objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
+            //objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
 
             startTime = static_cast<float>(glfwGetTime());
-            giraffeHit = true;
             giraffeHit = CheckCollision(objects.at("Giraffe"), objects.at("Bee"));
+            if (giraffeHit) {
+                objects.erase("Giraffe");
+            }
         }
 
         if (currentFrame - startTime > 2 && giraffeHit) {
@@ -150,8 +152,8 @@ int main(int argc, char * argv[]) {
             iter->second.Draw(sceneShader);
         }
 
-        textShader.use();
-        RenderText(textShader, "Test", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        //textShader.use();
+        //RenderText(textShader, "Test", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         sceneShader.use();
 
         // Flip Buffers and Draw
@@ -159,7 +161,7 @@ int main(int argc, char * argv[]) {
         glfwPollEvents();
     }   glfwTerminate();
 
-    engine->drop();
+    //engine->drop();
     
     return EXIT_SUCCESS;
 }
