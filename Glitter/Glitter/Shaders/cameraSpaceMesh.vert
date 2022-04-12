@@ -9,6 +9,7 @@ out vec3 FragPos;
 
 uniform mat4 persp;
 uniform mat4 transform;
+uniform mat4 view;
 
 void main()
 {

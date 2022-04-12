@@ -27,6 +27,8 @@ public:
     glm::mat4 rotateMat; 
     glm::mat4 scaleMat;
 
+    unsigned int texture;
+
     //Bounding Box parameters
     float _maxX, _minX, _maxZ, _minZ;
     float distNegX, distPosX, distNegZ, distPosZ;
@@ -136,7 +138,7 @@ public:
 
         // ------------------------------------------------ TEXTURES ------------------------------------------------
         // Genereate texture ID 
-        unsigned int texture;
+        
         glGenTextures(1, &texture);
 
         // Bind texture 
@@ -201,6 +203,10 @@ public:
         if (imageData) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
         }
+
+        //// Bind texture 
+        //glActiveTexture(0);
+        //glBindTexture(GL_TEXTURE_2D, texture);
 
         transform = translateMat * rotateMat * scaleMat;
         shader.setMat4("transform", transform);

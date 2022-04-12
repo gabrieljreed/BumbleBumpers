@@ -74,8 +74,6 @@ int main(int argc, char * argv[]) {
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
     bee.translate(0, 2, -2);
 
-
-
     vector<MeshModel> track = setupTrack();
     vector<MeshModel> giraffes = setupGiraffes();
 
@@ -90,6 +88,9 @@ int main(int argc, char * argv[]) {
 
     sceneShader.setVec3("lightColor", lightColor);
     sceneShader.setVec3("lightPosition", lightPosition);
+    beeShader.use();
+    beeShader.setVec3("lightColor", lightColor);
+    beeShader.setVec3("lightPosition", lightPosition);
 	
     // ------------------------------------------------ RENDERING LOOP ------------------------------------------------
 
@@ -182,7 +183,7 @@ int main(int argc, char * argv[]) {
         if (gameStarted && !paused) {
             RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
             RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
-            sceneShader.use();
+            //sceneShader.use();
         }
 
         // WIN STATE

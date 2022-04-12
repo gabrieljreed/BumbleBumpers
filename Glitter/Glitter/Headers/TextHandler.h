@@ -158,5 +158,5 @@ void RenderText(MeshShader& shader, std::string text, float x, float y, float sc
         // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
-    glBindVertexArray(0); // Unbind VAO     
+    glBindVertexArray(0); // Unbind VAO
 }
