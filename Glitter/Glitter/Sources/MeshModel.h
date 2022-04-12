@@ -224,6 +224,14 @@ public:
         translate(translateAmount);
     }
 
+    void translateAbsolute(const float& x, const float& y, const float& z) {
+        translateMat = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+    }
+
+    void translateAbsolute(const glm::vec3& newPosition) {
+        translateMat = glm::translate(glm::mat4(1.0f), newPosition);
+    }
+
     void rotate(float degrees, glm::vec3 direction) {
         rotateMat = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), direction);
     }

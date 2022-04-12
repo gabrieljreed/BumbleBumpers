@@ -68,6 +68,7 @@ int main(int argc, char * argv[]) {
 
     // Meshes
     MeshShader sceneShader = MeshShader("basic.vert", "basic.frag");
+    MeshShader beeShader = MeshShader("cameraSpaceMesh.vert", "basic.frag");
 
     map<string, MeshModel> objects;
     map<string, MeshModel>::iterator iter;
@@ -80,8 +81,9 @@ int main(int argc, char * argv[]) {
 
     MeshModel bee("beeUV", "beeTexture.png");
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
+    bee.translate(0, 2, -2);
     //bee.rotate(90, glm::vec3(0, 1, 0));
-    objects.insert({ "Bee", bee });
+    //objects.insert({ "Bee", bee });
 
     map<string, MeshModel> track = setupTrack();
     for (iter = track.begin(); iter != track.end(); ++iter) {
@@ -93,6 +95,9 @@ int main(int argc, char * argv[]) {
     // Perspective matrix - this doesn't change, so we don't need to set it on every frame  
     glm::mat4 persp = glm::perspective(FOV, (float)windowWidth / (float)windowHeight, nearClip, farClip);
     sceneShader.setMat4("persp", persp);
+    beeShader.use();
+    beeShader.setMat4("persp", persp);
+    sceneShader.use();
 
     sceneShader.setVec3("lightColor", lightColor);
     sceneShader.setVec3("lightPosition", lightPosition);
@@ -152,6 +157,11 @@ int main(int argc, char * argv[]) {
             iter->second.Draw(sceneShader);
         }
 
+        // BEE OVERLAY
+        beeShader.use();
+        bee.Draw(beeShader);
+
+        // TEXT RENDERING 
         if (!gameStarted) {
             RenderText(textShader, "Press Enter to start!", 25.0, windowHeight / 2, 1.0, glm::vec3(1, 1, 1));
         }
