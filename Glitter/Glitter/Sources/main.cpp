@@ -168,23 +168,20 @@ int main(int argc, char * argv[]) {
         }
 
         if (gameStarted && !paused) {
-            
-           
-
             RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-            
             RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
-            
             sceneShader.use();
         }
 
-        // Win state
+        // WIN STATE
         if (cameraPosition.z < -80) {
             paused = true;
 
             if (!scoreCalculated) {
                 finalTime = static_cast<float>(glfwGetTime());
                 scoreCalculated = true;
+
+                engine->play2D("../Audio/win.wav");
             }
             
 
@@ -193,9 +190,14 @@ int main(int argc, char * argv[]) {
 
         }
 
-        // Lose state 
+        // LOSE STATE
         if (timeRemaining < 0 && gameStarted) {
             paused = true;
+
+            if (!scoreCalculated) {
+                engine->play2D("../Audio/lose.wav");
+                scoreCalculated = true;
+            }
 
             RenderText(textShader, "You ran out of time!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(1, 0.0f, 0.0f));
         }
