@@ -80,6 +80,7 @@ int main(int argc, char * argv[]) {
 
     MeshModel bee("beeUV", "beeTexture.png");
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
+    bee.translate(glm::vec3(4, 0, -15));
     //bee.rotate(90, glm::vec3(0, 1, 0));
     objects.insert({ "Bee", bee });
 
@@ -119,10 +120,10 @@ int main(int argc, char * argv[]) {
 
             //objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
 
-            startTime = static_cast<float>(glfwGetTime());
-            giraffeHit = CheckCollision(objects.at("Giraffe"), objects.at("Bee"));
-            if (giraffeHit) {
-                objects.erase("Giraffe");
+            //startTime = static_cast<float>(glfwGetTime());
+
+            if (CheckCollision(objects.at("Wall0"), objects.at("Bee"))) {
+                objects.erase("Wall0");
             }
         }
 
@@ -153,15 +154,15 @@ int main(int argc, char * argv[]) {
         }
 
         if (gameStarted && !paused) {
-            int timeElapsed = (int)(currentFrame - startTime);
-            int timeRemaining = (int)(totalTime - timeElapsed);
+            //int timeElapsed = (int)(currentFrame - startTime);
+            //int timeRemaining = (int)(totalTime - timeElapsed);
            
 
-            RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            //RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
             
-            RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
+            //RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
             
-            sceneShader.use();
+            //sceneShader.use();
         }
 
         // Flip Buffers and Draw
