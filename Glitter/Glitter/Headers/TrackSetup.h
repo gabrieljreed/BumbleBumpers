@@ -9,16 +9,14 @@
 
 using namespace std;
 
-map<string, MeshModel> setupTrack() {
-	map<string, MeshModel> map;
-
+vector<MeshModel> setupTrack() {
 	vector<MeshModel> walls;
 
 	// Floor 
 	MeshModel floor = MeshModel("Floor", "Asphalt.jpg");
 	floor.scale(100);
 	floor.translate(0, 0, -43);
-	map.insert({"Floor", floor});
+	walls.push_back(floor);
 
 	// Walls
 	MeshModel wall = MeshModel("WallSidePivot", "Street.jpg");
@@ -152,13 +150,11 @@ map<string, MeshModel> setupTrack() {
 	wall.translate(37, -1.6, -88);
 	walls.push_back(wall);
 
+	return walls;
+}
 
-	for (unsigned int i = 0; i < walls.size(); i++) {
-		map.insert({ "Wall" + to_string(i), walls[i] });
-	}
-
-
-	// ------------------------------------------------ GIRAFFES ------------------------------------------------
+// ------------------------------------------------ GIRAFFES ------------------------------------------------
+vector<MeshModel> setupGiraffes() {
 	vector<MeshModel> giraffes;
 
 	MeshModel giraffe = MeshModel("Giraffe_Triangles", "Giraffe.png");
@@ -168,11 +164,32 @@ map<string, MeshModel> setupTrack() {
 	giraffe.translate(0, 0, -3);
 	giraffes.push_back(giraffe);
 
+	giraffe.translateAbsolute(-5, 0, -15);
+	giraffes.push_back(giraffe);
 
-	for (unsigned int i = 0; i < giraffes.size(); i++) {
-		map.insert({ "Giraffe" + to_string(i), giraffes[i] });
-	}
+	giraffe.translateAbsolute(-20, 0, -17);
+	giraffes.push_back(giraffe);
 
+	giraffe.translateAbsolute(-34, 0, -27);
+	giraffes.push_back(giraffe);
 
-	return map;
+	giraffe.translateAbsolute(-34, 0, -47);
+	giraffes.push_back(giraffe);
+
+	giraffe.translateAbsolute(-14, 0, -54);
+	giraffes.push_back(giraffe);
+
+	giraffe.translateAbsolute(0, 0, -54);
+	giraffes.push_back(giraffe);
+
+	giraffe.translateAbsolute(14, 0, -54);
+	giraffes.push_back(giraffe);
+
+	giraffe.translateAbsolute(30, 0, -59);
+	giraffes.push_back(giraffe);
+
+	giraffe.translateAbsolute(30, 0, -75);
+	giraffes.push_back(giraffe);
+
+	return giraffes;
 }

@@ -70,25 +70,12 @@ int main(int argc, char * argv[]) {
     MeshShader sceneShader = MeshShader("basic.vert", "basic.frag");
     MeshShader beeShader = MeshShader("cameraSpaceMesh.vert", "basic.frag");
 
-    map<string, MeshModel> objects;
-    map<string, MeshModel>::iterator iter;
-
-    // To insert objects into the scene, declare them here and add them to the objects map with a unique name
-
-    MeshModel giraffe("Giraffe_Triangles", "Giraffe.png"); 
-    giraffe.scale(0.5);
-    //objects.insert({ "Giraffe", giraffe });
-
     MeshModel bee("beeUV", "beeTexture.png");
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
     bee.translate(0, 2, -2);
-    //bee.rotate(90, glm::vec3(0, 1, 0));
-    //objects.insert({ "Bee", bee });
 
-    map<string, MeshModel> track = setupTrack();
-    for (iter = track.begin(); iter != track.end(); ++iter) {
-        objects.insert({ iter->first, iter->second });
-    }
+    vector<MeshModel> track = setupTrack();
+    vector<MeshModel> giraffes = setupGiraffes();
 
     sceneShader.use();
 
@@ -125,10 +112,10 @@ int main(int argc, char * argv[]) {
             //objects.at("OrangeCrayon").launch(glm::vec3(0, -1, 0), 4);
 
             startTime = static_cast<float>(glfwGetTime());
-            giraffeHit = CheckCollision(objects.at("Giraffe"), objects.at("Bee"));
+            /*giraffeHit = CheckCollision(objects.at("Giraffe"), objects.at("Bee"));
             if (giraffeHit) {
                 objects.erase("Giraffe");
-            }
+            }*/
         }
 
         //if (currentFrame - startTime > 2 && giraffeHit) {
@@ -148,15 +135,28 @@ int main(int argc, char * argv[]) {
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
         
-        for (iter = objects.begin(); iter != objects.end(); ++iter) {
-            iter->second.Draw(sceneShader);
+        // DRAW OBJECTS 
+        for (unsigned int i = 0; i < track.size(); i++) {
+            track[i].Draw(sceneShader);
+        }
+
+        for (unsigned int i = 0; i < giraffes.size(); i++) {
+            giraffes[i].Draw(sceneShader);
         }
 
         // GIRAFFES PACING 
-        objects.at("Giraffe0").pace(0.1, 3, glm::vec3(1, 0, 0));
+        giraffes[0].pace(0.1, 3, glm::vec3(1, 0, 0));
+        giraffes[1].pace(0.1, 2, glm::vec3(-1, 0, 1));
+        giraffes[2].pace(0.1, 2, glm::vec3(0, 0, 1));
+        giraffes[3].pace(0.1, 3, glm::vec3(1, 0, 0));
+        giraffes[4].pace(0.1, 3, glm::vec3(1, 0, 1));
+        giraffes[5].pace(0.09, 3, glm::vec3(0, 0, 1));
+        giraffes[6].pace(0.08, 3, glm::vec3(0, 0, 1));
+        giraffes[7].pace(0.07, 3, glm::vec3(0, 0, 1));
+        giraffes[8].pace(0.07, 3, glm::vec3(1, 0, 1));
+        giraffes[9].pace(0.06, 3, glm::vec3(1, 0, 0));
 
         // BEE OVERLAY
-        beeShader.use();
         bee.Draw(beeShader);
 
         // TEXT RENDERING 
@@ -181,7 +181,7 @@ int main(int argc, char * argv[]) {
         glfwPollEvents();
     }   glfwTerminate();
 
-    //engine->drop();
+    engine->drop();
     
     return EXIT_SUCCESS;
 }

@@ -225,10 +225,14 @@ public:
     }
 
     void translateAbsolute(const float& x, const float& y, const float& z) {
+        position.x = x;
+        position.y = y;
+        position.z = z;
         translateMat = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
     }
 
     void translateAbsolute(const glm::vec3& newPosition) {
+        position = newPosition;
         translateMat = glm::translate(glm::mat4(1.0f), newPosition);
     }
 
