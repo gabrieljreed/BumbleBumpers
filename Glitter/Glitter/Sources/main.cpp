@@ -177,6 +177,7 @@ int main(int argc, char * argv[]) {
 
         // TEXT RENDERING 
         if (!gameStarted) {
+            RenderText(textShader, "BUMBLE BUMPERS", 25.0, windowHeight / 2 + 200, 1.0, glm::vec3(0, 1, 1));
             RenderText(textShader, "Press Enter to start!", 25.0, windowHeight / 2, 1.0, glm::vec3(1, 1, 1));
         }
 
