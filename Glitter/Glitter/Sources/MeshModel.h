@@ -64,10 +64,10 @@ public:
         position = glm::vec3(0, 0, 0);
         objectScale = glm::vec3(1, 1, 1);
 
-        distPosX = _maxX - position.x;
+        /*distPosX = _maxX - position.x;
         distNegX = position.x - _minX;
         distPosZ = _maxZ - position.z;
-        distNegZ = position.x - _minZ;
+        distNegZ = position.x - _minZ;*/
 
         direction = 1;
         pacePosition = 0.0f;
@@ -87,10 +87,10 @@ public:
         pacePosition = 0.0f;
         position = initPosition;
 
-        distPosX = _maxX - position.x;
+        /*distPosX = _maxX - position.x;
         distNegX = position.x - _minX;
         distPosZ = _maxZ - position.z;
-        distNegZ = position.x - _minZ;
+        distNegZ = position.x - _minZ;*/
 
         launching = false;
 
@@ -222,6 +222,10 @@ public:
 
     void translate(glm::vec3 translateAmount) {
         position += translateAmount;
+        _maxX += translateAmount[0];
+        _minX += translateAmount[0];
+        _maxZ += translateAmount[2];
+        _minZ += translateAmount[2];
         translateMat = glm::translate(glm::mat4(1.0f), position);
     }
 
