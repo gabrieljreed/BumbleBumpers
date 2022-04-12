@@ -140,9 +140,19 @@ int main(int argc, char * argv[]) {
         cameraBounds.push_back(cameraPosition[2] + 1.5);
         cameraBounds.push_back(cameraPosition[2] + -1.5);
 
-        //for (int i = 0; i < track.size(); i++) {
-        //    bool trackCol = CheckCollision(track.at(i), cameraBounds);
-        //}
+        bool trackCol = false;
+        int trackIndex = 0;
+        for (int i = 0; i < track.size(); i++) {
+            trackCol = CheckCollision(track.at(i), cameraBounds);
+            if (trackCol) {
+                trackIndex = i;
+                break;
+            }
+        }
+        if (trackCol) {
+            //track.erase(track.begin() + trackIndex);
+            trackCol = false;
+        }
 
         float collideFrame = currentFrame;
         bool giraffeCol = false;

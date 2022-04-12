@@ -260,7 +260,21 @@ public:
     }
 
     void rotate(float degrees, glm::vec3 direction) {
+        /*float angle1 = atan2(_maxZ, _maxX);
+        float distance1 = sqrt(_maxX * _maxX + _maxZ * _maxZ);
+        //angle1 += rotation;
+        float rotatedX1 = sin(angle1) * distance1;
+        float rotatedZ1 = cos(angle1) * distance1;*/
         rotateMat = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), direction);
+        glm::vec4 x1 = glm::vec4(_maxX, 0, 0, 1);
+        glm::vec4 x2 = glm::vec4(_minX, 0, 0, 1);
+        glm::vec4 z1 = glm::vec4(0, 0, _maxZ, 1);
+        glm::vec4 z2 = glm::vec4(0, 0, _minZ, 1);
+        _maxX = (x1 * rotateMat)[0];
+        _minX = (x2 * rotateMat)[0];
+        _maxZ = (z1 * rotateMat)[2];
+        _minZ = (z2 * rotateMat)[2];
+        printf("yo");
     }
 
     void scale(glm::vec3 scaleAmount) {
