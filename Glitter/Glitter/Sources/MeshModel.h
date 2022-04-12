@@ -214,7 +214,6 @@ public:
         if (launching) {
             translate(launchDirection * launchSpeed);
         }
-
         
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);           // Draw elements 
         glBindVertexArray(0);                                                       // Unbind VAO 
@@ -235,6 +234,14 @@ public:
     }
 
     void translateAbsolute(const float& x, const float& y, const float& z) {
+        glm::vec3 newPosition = glm::vec3(x, y, z);
+        glm::vec3 translateAmount = newPosition - position;
+
+        _maxX += translateAmount[0];
+        _minX += translateAmount[0];
+        _maxZ += translateAmount[2];
+        _minZ += translateAmount[2];
+
         position.x = x;
         position.y = y;
         position.z = z;
@@ -242,6 +249,12 @@ public:
     }
 
     void translateAbsolute(const glm::vec3& newPosition) {
+        glm::vec3 translateAmount = newPosition - position;
+
+        _maxX += translateAmount[0];
+        _minX += translateAmount[0];
+        _maxZ += translateAmount[2];
+        _minZ += translateAmount[2];
         position = newPosition;
         translateMat = glm::translate(glm::mat4(1.0f), newPosition);
     }
@@ -252,11 +265,19 @@ public:
 
     void scale(glm::vec3 scaleAmount) {
         objectScale *= scaleAmount;
+        _maxX *= scaleAmount[0];
+        _minX *= scaleAmount[0];
+        _maxZ *= scaleAmount[2];
+        _minZ *= scaleAmount[2];
         scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
     }
 
     void scale(float scaleAmount) {
         objectScale *= scaleAmount;
+        _maxX *= scaleAmount;
+        _minX *= scaleAmount;
+        _maxZ *= scaleAmount;
+        _minZ *= scaleAmount;
         scaleMat = glm::scale(glm::mat4(1.0f), objectScale);
     }
 

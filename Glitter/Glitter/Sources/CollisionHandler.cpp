@@ -1,6 +1,6 @@
 #include "CollisionHandler.h"
 
-bool CheckCollision(MeshModel& one, MeshModel& two) // AABB - AABB collision
+bool CheckCollision(MeshModel& one, vector<float> cameraBounds) // AABB - AABB collision
 {
     /*// collision x-axis?
     bool posCollisionX = one.position.x + one.distPosX >= two.position.x &&
@@ -21,15 +21,14 @@ bool CheckCollision(MeshModel& one, MeshModel& two) // AABB - AABB collision
     //    (one._minX >= two._minX && two._maxX >= one._maxX);
     //bool colZ = (one._minZ <= two._maxZ && two._maxZ <= one._maxZ) || 
     //    (one._minZ <= two._minZ && two._minZ <= one._maxZ);
-    
 
-    bool colX = (one._maxX >= two._maxX && two._maxX >= one._minX) ||
-        (one._maxX >= two._minX && two._minX >= one._minX) ||
-        (one._maxX >= two._maxX && one._minX <= two._minX) ||
-        (two._maxX >= one._maxX && two._minX <= one._minX);
-    bool colZ = (one._maxZ >= two._maxZ && two._maxZ >= one._minZ) ||
-        (one._maxZ >= two._minZ && two._minZ >= one._minZ) ||
-        (one._maxZ >= two._maxZ && one._minZ <= two._minZ) ||
-        (two._maxZ >= one._maxZ && two._minZ <= one._minZ);
+    bool colX = (one._maxX >= cameraBounds[0] && cameraBounds[0] >= one._minX) ||
+        (one._maxX >= cameraBounds[1] && cameraBounds[1] >= one._minX) ||
+        (one._maxX >= cameraBounds[0] && one._minX <= cameraBounds[1]) ||
+        (cameraBounds[0] >= one._maxX && cameraBounds[1] <= one._minX);
+    bool colZ = (one._maxZ >= cameraBounds[2] && cameraBounds[2] >= one._minZ) ||
+        (one._maxZ >= cameraBounds[3] && cameraBounds[3] >= one._minZ) ||
+        (one._maxZ >= cameraBounds[2] && one._minZ <= cameraBounds[3]) ||
+        (cameraBounds[2] >= one._maxZ && cameraBounds[3] <= one._minZ);
     return colX && colZ;
 }
