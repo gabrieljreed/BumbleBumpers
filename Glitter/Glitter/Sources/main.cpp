@@ -102,6 +102,9 @@ int main(int argc, char * argv[]) {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        int timeElapsed = (int)(currentFrame - startTime);
+        int timeRemaining = (int)(totalTime - timeElapsed);
+
         // Handle user input 
         handleKeypress(mWindow);
 
@@ -165,8 +168,7 @@ int main(int argc, char * argv[]) {
         }
 
         if (gameStarted && !paused) {
-            int timeElapsed = (int)(currentFrame - startTime);
-            int timeRemaining = (int)(totalTime - timeElapsed);
+            
            
 
             RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
@@ -174,6 +176,28 @@ int main(int argc, char * argv[]) {
             RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
             
             sceneShader.use();
+        }
+
+        // Win state
+        if (cameraPosition.z < -80) {
+            paused = true;
+
+            if (!scoreCalculated) {
+                finalTime = static_cast<float>(glfwGetTime());
+                scoreCalculated = true;
+            }
+            
+
+            RenderText(textShader, "Finished!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            RenderText(textShader, "Your score: " + to_string((int)calculateScore()), 25.0f, windowHeight - 200, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        }
+
+        // Lose state 
+        if (timeRemaining < 0 && gameStarted) {
+            paused = true;
+
+            RenderText(textShader, "You ran out of time!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(1, 0.0f, 0.0f));
         }
 
         // Flip Buffers and Draw

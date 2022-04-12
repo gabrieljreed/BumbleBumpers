@@ -5,13 +5,15 @@ bool gameStarted = false;
 bool paused = true;
 
 float startTime = 0.0f;
-float totalTime = 90.0f; // Total number of seconds the player has to finish the game 
+float totalTime = 5.0f; // Total number of seconds the player has to finish the game 
 float finalTime = 0.0f; // To be set when the player crosses the finish line 
 int numGiraffes = 0; // Number of giraffes the player has hit 
+
+bool scoreCalculated = false;
 
 
 float calculateScore() {
 	float timeRemaining = totalTime - finalTime; 
 
-	return timeRemaining * numGiraffes;
+	return timeRemaining * (numGiraffes + 1);
 }
