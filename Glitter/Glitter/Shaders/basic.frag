@@ -14,7 +14,7 @@ void main() {
     vec3 color = texture(texture1, TexCoord).rgb;
     
     // Ambient
-    float ambientStrength = 0.1f;
+    float ambientStrength = 0.3;
     vec3 ambientColor = lightColor * ambientStrength;
 
     // Diffuse
@@ -25,6 +25,7 @@ void main() {
     vec3 diffuse = lightColor * diff;
 
     vec3 result = (ambientColor + diffuse) * color;
+    //result = ambientStrength * color;
 
     //result = texture(texture1, TexCoord).rgb;
     ColorOut = vec4(result, 1.0);

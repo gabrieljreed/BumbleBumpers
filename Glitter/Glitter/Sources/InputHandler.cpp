@@ -9,36 +9,43 @@ void handleKeypress(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-        paused = false;
-        if (!gameStarted) {
-            gameStarted = true;
-            startTime = static_cast<float>(glfwGetTime());
-        }
-    }
+    
 
     if (!paused) {
         // WSAD movement 
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             cameraPosition += cameraSpeed * cameraLookAt;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            //cameraLookAt += cameraSpeed * cameraLookAt;
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             cameraPosition -= cameraSpeed * cameraLookAt;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            //cameraLookAt -= cameraSpeed * cameraLookAt;
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             cameraPosition += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            //cameraLookAt += glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             cameraPosition -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+            //cameraLookAt -= glm::normalize(glm::cross(cameraLookAt, cameraUp)) * cameraSpeed;
+        }
 
         if (debugMode) {
             // E and Q for up/down movement 
-            if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+            if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
                 cameraPosition -= cameraUp * cameraSpeed;
-            if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+            }
+            if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
                 cameraPosition += cameraUp * cameraSpeed;
+            }
         }
     }
 }
 
 void handleMouse(GLFWwindow* window, double xPos, double yPos) {
+    if (paused)
+        return;
+
     if (firstMouse) {
         lastX = xPos;
         lastY = yPos;
