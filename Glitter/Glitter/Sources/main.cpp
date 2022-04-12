@@ -147,15 +147,13 @@ int main(int argc, char * argv[]) {
         glm::mat4 view = glm::mat4(1.0f);
         view = glm::lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         sceneShader.setMat4("view", view);
-
-        //// Animation 
-        //meshes[0].pace(0.1, 5, glm::vec3(0.0f, 0.05f, -10.0f), 'x');
-        //meshes[1].pace(0.2, 12, glm::vec3(2.0f, 0.05f, -10.0f), 'z');
-
         
         for (iter = objects.begin(); iter != objects.end(); ++iter) {
             iter->second.Draw(sceneShader);
         }
+
+        // GIRAFFES PACING 
+        objects.at("Giraffe0").pace(0.1, 3, glm::vec3(1, 0, 0));
 
         // BEE OVERLAY
         beeShader.use();

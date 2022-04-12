@@ -40,7 +40,7 @@ public:
     glm::vec3 objectScale;
 
     // Movement parameters 
-    bool direction;
+    float direction;
     float pacePosition;
 
     // Launch params 
@@ -67,7 +67,7 @@ public:
         distPosZ = _maxZ - position.z;
         distNegZ = position.x - _minZ;
 
-        direction = true;
+        direction = 1;
         pacePosition = 0.0f;
 
         launching = false;
@@ -81,7 +81,7 @@ public:
         rotateMat = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1, 0, 0));
         scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
 
-        direction = true;
+        direction = 1;
         pacePosition = 0.0f;
         position = initPosition;
 
@@ -257,40 +257,22 @@ public:
         rotate(180, glm::vec3(1, 0, 0));
     }
 
-    void pace(float speed, float range, glm::vec3 center, char axis) {
-        if (direction) {
-            pacePosition += speed;
-        }
-        else {
-            pacePosition -= speed;
-        }
+    void pace(float speed, float range, glm::vec3 axis) {
+        glm::vec3 translateAxis = glm::vec3(speed) * axis;
+
+        translateAxis = direction * translateAxis;
+
+        pacePosition += speed * direction;
 
         if (pacePosition > range) {
-            direction = false;
+            // Switch directions 
+            direction = -1;
         }
         else if (pacePosition < -range) {
-            direction = true;
+            direction = 1;
         }
 
-        glm::vec3 translateAxis;
-
-        if (axis == 'x') {
-            translateAxis = glm::vec3(pacePosition, 0, 0);
-        }
-        else if (axis == 'y') {
-            translateAxis = glm::vec3(0, pacePosition, 0);
-        }
-        else if (axis == 'z') {
-            translateAxis = glm::vec3(0, 0, pacePosition);
-        }
-        else {
-            translateAxis = glm::vec3(0, 0, 0);
-            cout << "ERROR - INVALID AXIS" << endl; 
-        }
-
-        glm::vec3 translateAmount = center + translateAxis;
-
-        translate(translateAmount);
+        translate(translateAxis);
     }
 
     void launch(glm::vec3 direction, float speed) {
