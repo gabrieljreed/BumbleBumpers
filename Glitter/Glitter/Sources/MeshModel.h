@@ -274,7 +274,7 @@ public:
         _minX = (x2 * rotateMat)[0];
         _maxZ = (z1 * rotateMat)[2];
         _minZ = (z2 * rotateMat)[2];
-        printf("yo");
+        //printf("yo");
     }
 
     void scale(glm::vec3 scaleAmount) {

@@ -8,16 +8,16 @@
 #include "InputHandler.h"
 #include "TrackSetup.h"
 #include "Gamemode.h"
-//#include "TextHandler.h"
+#include "TextHandler.h"
 #include "CollisionHandler.h"
 
 // Text Headers
-//#include <ft2build.h>
-//#include FT_FREETYPE_H
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 // Sound headers
-//#include "irrKlang.h"
-//#pragma comment(lib, "irrKlang.lib")
+#include "irrKlang.h"
+#pragma comment(lib, "irrKlang.lib")
 
 // System Headers
 #include <glad/glad.h>
@@ -49,17 +49,17 @@ int main(int argc, char * argv[]) {
     auto mWindow = windowSetup();
 
     // Audio setup 
-    //irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-    //if (!engine)
-    //    return 0; // Error starting up sound device 
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+    if (!engine)
+        return 0; // Error starting up sound device 
 
     // Text setup 
-    //MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
-    //textShader.use();
+    MeshShader textShader = MeshShader("text2D.vert", "text2D.frag");
+    textShader.use();
 
     glm::mat4 orthoProjection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
-    //textShader.setMat4("projection", orthoProjection);
-    //setupText();
+    textShader.setMat4("projection", orthoProjection);
+    setupText();
 
     // ------------------------------------------------ DEFINE SCENE  ------------------------------------------------
     // Lighting
@@ -100,6 +100,12 @@ int main(int argc, char * argv[]) {
 
     //float startTime = 0.0f;
     bool giraffeHit = false;
+    irrklang::ISound* backgroundMusic;
+
+    irrklang::ISoundSource* backgroundMusicSound = engine->addSoundSourceFromFile("../Audio/polka.wav");
+    backgroundMusicSound->setDefaultVolume(0.2);
+    irrklang::ISoundSource* boingSound = engine->addSoundSourceFromFile("../Audio/boing1.wav");
+    boingSound->setDefaultVolume(50);
 
     while (glfwWindowShouldClose(mWindow) == false) {
         sceneShader.use();
@@ -120,8 +126,8 @@ int main(int argc, char * argv[]) {
             if (!gameStarted) {
                 gameStarted = true;
                 startTime = static_cast<float>(glfwGetTime());
-                //engine->play2D("../Audio/go.wav");
-                //engine->play2D("../Audio/polka.wav", true);
+                engine->play2D("../Audio/go.wav");
+                backgroundMusic = engine->play2D(backgroundMusicSound, true);
             }
         }
 
@@ -163,9 +169,17 @@ int main(int argc, char * argv[]) {
                 giraffeIndex = i;
                 giraffes[giraffeIndex].launch(glm::vec3(0, -1, 0), 4);
                 collideFrame = static_cast<float>(glfwGetTime());
+                if (giraffes[giraffeIndex].position.y == 0) {
+                    numGiraffes++;
+                    engine->play2D(boingSound);
+                }
                 break;
             }
         }
+        /*if (giraffeCol) {
+            numGiraffes++;
+            giraffeCol = false;
+        }*/
         if (collideFrame - currentFrame > 2 && giraffeCol) {
             giraffes.erase(giraffes.begin() + giraffeIndex - 1);
             pacingSpeeds.erase(pacingSpeeds.begin() + giraffeIndex - 1);
@@ -201,7 +215,7 @@ int main(int argc, char * argv[]) {
         bee.Draw(beeShader);
 
         // TEXT RENDERING 
-        /*if (!gameStarted) {
+        if (!gameStarted) {
             RenderText(textShader, "BUMBLE BUMPERS", 25.0, windowHeight / 2 + 200, 1.0, glm::vec3(0, 1, 1));
             RenderText(textShader, "Press Enter to start!", 25.0, windowHeight / 2, 1.0, glm::vec3(1, 1, 1));
         }
@@ -210,7 +224,7 @@ int main(int argc, char * argv[]) {
             RenderText(textShader, "Time remaining: " + to_string(timeRemaining), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
             RenderText(textShader, "Giraffes hit: " + to_string(numGiraffes), 25.0f, windowHeight - 100, 1.0f, glm::vec3(1.0, 0, 0));
             //sceneShader.use();
-        }*/
+        }
 
         // WIN STATE
         if (cameraPosition.z < -80) {
@@ -220,12 +234,15 @@ int main(int argc, char * argv[]) {
                 finalTime = static_cast<float>(glfwGetTime());
                 scoreCalculated = true;
 
-                //engine->play2D("../Audio/win.wav");
+                /*backgroundMusic->stop();
+                backgroundMusic->drop();*/
+                engine->stopAllSounds();
+                engine->play2D("../Audio/win.wav");
             }
             
 
-            //RenderText(textShader, "Finished!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-            //RenderText(textShader, "Your score: " + to_string((int)calculateScore()), 25.0f, windowHeight - 200, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            RenderText(textShader, "Finished!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            RenderText(textShader, "Your score: " + to_string((int)calculateScore()), 25.0f, windowHeight - 200, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 
         }
 
@@ -234,11 +251,12 @@ int main(int argc, char * argv[]) {
             paused = true;
 
             if (!scoreCalculated) {
-                //engine->play2D("../Audio/lose.wav");
+                engine->stopAllSounds();
+                engine->play2D("../Audio/lose.wav");
                 scoreCalculated = true;
             }
 
-            //RenderText(textShader, "You ran out of time!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(1, 0.0f, 0.0f));
+            RenderText(textShader, "You ran out of time!", 25.0f, windowHeight - 100, 1.0f, glm::vec3(1, 0.0f, 0.0f));
         }
 
         // Flip Buffers and Draw
@@ -246,7 +264,7 @@ int main(int argc, char * argv[]) {
         glfwPollEvents();
     }   glfwTerminate();
 
-    //engine->drop();
+    engine->drop();
     
     return EXIT_SUCCESS;
 }
