@@ -3,4 +3,4 @@
 #include "glitter.hpp"
 #include "MeshModel.h"
 
-bool CheckCollision(MeshModel& one, MeshModel& two);
+bool CheckCollision(MeshModel& one, vector<float> cameraBounds);
