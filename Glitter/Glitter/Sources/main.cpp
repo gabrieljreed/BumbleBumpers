@@ -74,6 +74,8 @@ int main(int argc, char * argv[]) {
     bee.rotate(180, glm::vec3(1, 0, 0)); // Bee model always needs to be rotated 180 degrees 
     bee.translate(0, 2, -2);
 
+
+
     vector<MeshModel> track = setupTrack();
     vector<MeshModel> giraffes = setupGiraffes();
 
@@ -107,6 +109,16 @@ int main(int argc, char * argv[]) {
 
         // Handle user input 
         handleKeypress(mWindow);
+
+        if (glfwGetKey(mWindow, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            paused = false;
+            if (!gameStarted) {
+                gameStarted = true;
+                startTime = static_cast<float>(glfwGetTime());
+                engine->play2D("../Audio/go.wav");
+                engine->play2D("../Audio/polka.wav", true);
+            }
+        }
 
 
         if (glfwGetKey(mWindow, GLFW_KEY_P) == GLFW_PRESS) {

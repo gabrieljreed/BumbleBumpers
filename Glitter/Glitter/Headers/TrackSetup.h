@@ -150,6 +150,11 @@ vector<MeshModel> setupTrack() {
 	wall.translate(37, -1.6, -88);
 	walls.push_back(wall);
 
+	MeshModel finishLine = MeshModel("CubeTriangles", "checks.png");
+	finishLine.scale(glm::vec3(11, 1, 1));
+	finishLine.translate(30.5, 0.4, -79);
+	walls.push_back(finishLine);
+
 	return walls;
 }
 
